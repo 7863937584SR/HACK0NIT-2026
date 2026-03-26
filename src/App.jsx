@@ -21,6 +21,7 @@ import FraudGuide from './components/FraudGuide';
 import CyberNumbers from './components/CyberNumbers';
 import CyberLaws from './components/CyberLaws';
 import AuthPage from './components/AuthPage';
+import FraudReportGenerator from './components/FraudReportGenerator';
 
 // Sample alerts for live feed
 const SAMPLE_ALERTS = [
@@ -43,6 +44,8 @@ function App() {
   const [history, setHistory] = useState([]);
   const [activeView, setActiveView] = useState('home');
   const [stats, setStats] = useState({ total: 0, highRisk: 0, commonScam: 'OTP Phishing' });
+  const [showReportGenerator, setShowReportGenerator] = useState(false);
+  const [reportResult, setReportResult] = useState(null);
 
   // Auth state — check localStorage on mount
   const [user, setUser] = useState(() => {
@@ -159,6 +162,16 @@ function App() {
 
   const clearResult = () => setResult(null);
 
+  const handleGenerateReport = (resultData) => {
+    setReportResult(resultData);
+    setShowReportGenerator(true);
+  };
+
+  const handleCloseReportGenerator = () => {
+    setShowReportGenerator(false);
+    setReportResult(null);
+  };
+
   // Determine if we need specialized scanner
   const showTransactionForm = activeModule === 'transaction';
   const showDeepfakeChecker = activeModule === 'deepfake';
@@ -200,6 +213,7 @@ function App() {
                 result={result} 
                 onClose={clearResult} 
                 onReportFraud={() => { setActiveView('complaint'); clearResult(false); }}
+                onGenerateReport={handleGenerateReport}
               />
             )}
             
@@ -238,7 +252,8 @@ function App() {
               <ResultCard 
                 result={result} 
                 onClose={clearResult}
-                onReportFraud={() => { setActiveView('complaint'); clearResult(false); }} 
+                onReportFraud={() => { setActiveView('complaint'); clearResult(false); }}
+                onGenerateReport={handleGenerateReport}
               />
             )}
             <ModuleGrid 
@@ -290,11 +305,13 @@ function App() {
                 { title: 'Deepfake Analysis', desc: 'Analyze video/image/audio for manipulation signals', enabled: true },
                 { title: 'Transaction Risk Analysis', desc: 'Evaluate UPI transactions for scam indicators', enabled: true },
                 { title: 'Save Scan History', desc: 'Store scan results locally (up to 100 scans)', enabled: true },
+                { title: 'GPG Report Generation', desc: 'Generate encrypted fraud reports with digital signatures', enabled: true },
+                { title: 'Digital Wallet', desc: 'Securely store encrypted reports in your personal wallet', enabled: true },
               ].map((setting, i) => (
                 <div key={i} style={{ 
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
                   padding: '12px 0', 
-                  borderBottom: i < 9 ? '1px solid var(--border-glass)' : 'none'
+                  borderBottom: i < 11 ? '1px solid var(--border-glass)' : 'none'
                 }}>
                   <div>
                     <p style={{ fontWeight: 600, fontSize: '14px' }}>{setting.title}</p>
@@ -327,6 +344,36 @@ function App() {
           </div>
         )}
       </main>
+      
+      {/* Fraud Report Generator Modal */}
+      {showReportGenerator && reportResult && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0,0,0,0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+          padding: '20px'
+        }}>
+          <div style={{
+            maxWidth: '600px',
+            width: '100%',
+            maxHeight: '80vh',
+            overflow: 'auto'
+          }}>
+            <FraudReportGenerator 
+              result={reportResult}
+              user={user}
+              onClose={handleCloseReportGenerator}
+            />
+          </div>
+        </div>
+      )}
       
       <BottomNav activeView={activeView} onViewChange={setActiveView} />
     </div>
