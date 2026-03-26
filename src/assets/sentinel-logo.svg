@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" fill="none">
+  <defs>
+    <linearGradient id="shieldGrad" x1="16" y1="14" x2="78" y2="82" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+    <linearGradient id="checkGrad" x1="29" y1="49" x2="64" y2="49" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#DDF4FF"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="8" y="8" width="80" height="80" rx="22" fill="#EEF2FF"/>
+  <path d="M48 16L72 24V44C72 59.3 62.6 73.1 48 80C33.4 73.1 24 59.3 24 44V24L48 16Z" fill="url(#shieldGrad)"/>
+  <path d="M40.9 56.3L31.8 47.1C30.9 46.2 30.9 44.8 31.8 43.9C32.7 43 34.1 43 35 43.9L42.5 51.4L61 33C61.9 32.1 63.3 32.1 64.2 33C65.1 33.9 65.1 35.3 64.2 36.2L44.2 56.3C43.3 57.2 41.8 57.2 40.9 56.3Z" fill="url(#checkGrad)"/>
+</svg>

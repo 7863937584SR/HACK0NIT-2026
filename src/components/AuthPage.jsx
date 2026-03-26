@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import appLogo from '../assets/vite.svg';
 
 // Floating particle dots for background
 function Particles() {
@@ -120,10 +121,13 @@ export default function AuthPage({ onAuth }) {
       <div className="auth-container">
         {/* Logo */}
         <div className="auth-logo">
-          <div className="auth-logo-icon">🛡️</div>
+          <div className="auth-logo-icon" aria-hidden="true">
+            <img src={appLogo} alt="Sentinel One logo" className="auth-logo-image" />
+          </div>
           <div>
             <div className="auth-logo-title">Sentinel One</div>
             <div className="auth-logo-sub">SENTINEL AI</div>
+            <p className="auth-logo-tagline">Predict. Protect. Prevent fraud in seconds.</p>
           </div>
         </div>
 
@@ -143,6 +147,12 @@ export default function AuthPage({ onAuth }) {
             >
               Create Account
             </button>
+          </div>
+
+          <div className="auth-trust-row" aria-hidden="true">
+            <span className="auth-trust-pill">No spam</span>
+            <span className="auth-trust-pill">No ads</span>
+            <span className="auth-trust-pill">Private by default</span>
           </div>
 
           <form onSubmit={handleSubmit} noValidate className="auth-form">

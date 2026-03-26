@@ -1,15 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const FRAUD_TYPES = [
   { id: 'upi', label: 'UPI / Payment Fraud', icon: '💳' },
   { id: 'otp', label: 'OTP / Banking Fraud', icon: '🏦' },
   { id: 'job', label: 'Fake Job Offer', icon: '💼' },
   { id: 'investment', label: 'Investment / Trading Scam', icon: '📈' },
+  { id: 'crypto', label: 'Crypto / Wallet Scam', icon: '🪙' },
   { id: 'lottery', label: 'Lottery / Prize Scam', icon: '🎁' },
   { id: 'loan', label: 'Loan / Credit Fraud', icon: '💰' },
   { id: 'romance', label: 'Romance / Social Media Scam', icon: '❤️' },
+  { id: 'social-hack', label: 'Social Media Account Hacked', icon: '🔐' },
+  { id: 'sextortion', label: 'Sextortion / Blackmail', icon: '⚫' },
   { id: 'impersonation', label: 'Government / Bank Impersonation', icon: '🏛️' },
-  { id: 'deepfake', label: 'Deepfake / AI Fraud', icon: '🎥' },
+  { id: 'deepfake-video', label: 'Deepfake Video Fraud', icon: '🎬' },
+  { id: 'deepfake-audio', label: 'Deepfake Voice / Audio Fraud', icon: '🎤' },
+  { id: 'deepfake-image', label: 'AI Image / Face Morph Fraud', icon: '🖼️' },
+  { id: 'sim-swap', label: 'SIM Swap / Number Hijack', icon: '📱' },
+  { id: 'ransomware', label: 'Ransomware / Malware Attack', icon: '🧨' },
+  { id: 'phishing', label: 'Phishing Link / Fake Website', icon: '🔗' },
+  { id: 'tech-support', label: 'Fake Customer Care / Tech Support', icon: '🛠️' },
   { id: 'ecommerce', label: 'E-commerce / Delivery Scam', icon: '📦' },
   { id: 'other', label: 'Other Cyber Crime', icon: '🚨' },
 ];
@@ -35,6 +44,11 @@ const REPORTING_LINKS = {
     { label: 'SEBI SCORES', url: 'https://scores.sebi.gov.in', note: 'Report fake trading/investment schemes' },
     { label: 'RBI Complaint', url: 'https://cms.rbi.org.in', note: 'Report illegal forex/crypto scams' },
   ],
+  crypto: [
+    { label: 'National Cyber Crime Portal', url: 'https://cybercrime.gov.in', note: 'Report crypto investment/wallet fraud' },
+    { label: 'SEBI SCORES', url: 'https://scores.sebi.gov.in', note: 'Report unauthorized investment solicitation' },
+    { label: 'RBI Complaint', url: 'https://cms.rbi.org.in', note: 'Escalate payment-side issues through banking channel' },
+  ],
   lottery: [
     { label: 'National Cyber Crime Portal', url: 'https://cybercrime.gov.in', note: 'File complaint for lottery fraud' },
   ],
@@ -45,13 +59,48 @@ const REPORTING_LINKS = {
   romance: [
     { label: 'National Cyber Crime Portal', url: 'https://cybercrime.gov.in', note: 'Report romance/social media scam' },
   ],
+  'social-hack': [
+    { label: 'National Cyber Crime Portal', url: 'https://cybercrime.gov.in', note: 'Report account takeover / identity misuse' },
+    { label: 'Meta Account Recovery', url: 'https://www.facebook.com/hacked', note: 'Recover compromised Facebook/Instagram accounts' },
+    { label: 'Google Account Recovery', url: 'https://accounts.google.com/signin/recovery', note: 'Recover Gmail/Google-linked identities' },
+  ],
+  sextortion: [
+    { label: 'National Cyber Crime Portal', url: 'https://cybercrime.gov.in', note: 'Report blackmail, extortion, non-consensual content threats' },
+    { label: 'Women & Child Cyber Crime Reporting', url: 'https://cybercrime.gov.in/Webform/Crime_AuthoLogin.aspx?rnt=5', note: 'Fast-track category for sensitive harassment cases' },
+    { label: 'Call 1930 (24x7)', url: 'tel:1930', note: 'Immediate response support and guidance' },
+  ],
   impersonation: [
     { label: 'National Cyber Crime Portal', url: 'https://cybercrime.gov.in', note: 'Report impersonation fraud' },
     { label: 'RBI Ombudsman', url: 'https://cms.rbi.org.in', note: 'If impersonating bank/RBI' },
   ],
-  deepfake: [
+  'deepfake-video': [
+    { label: 'National Cyber Crime Portal', url: 'https://cybercrime.gov.in', note: 'Report manipulated video/deepfake circulation' },
+    { label: 'IT Act 66C/66D Guidance', url: 'https://cybercrime.gov.in', note: 'Identity theft and impersonation via synthetic video' },
+  ],
+  'deepfake-audio': [
+    { label: 'National Cyber Crime Portal', url: 'https://cybercrime.gov.in', note: 'Report cloned voice calls and synthetic audio fraud' },
+    { label: 'Call 1930 (24x7)', url: 'tel:1930', note: 'Urgent escalation for active financial voice scams' },
+  ],
+  'deepfake-image': [
     { label: 'National Cyber Crime Portal', url: 'https://cybercrime.gov.in', note: 'Report AI/deepfake harassment' },
     { label: 'IT Act Section 66C/66D', url: 'https://cybercrime.gov.in', note: 'Identity theft via deepfake' },
+  ],
+  'sim-swap': [
+    { label: 'National Cyber Crime Portal', url: 'https://cybercrime.gov.in', note: 'Report SIM hijack and OTP interception fraud' },
+    { label: 'TRAI Consumer Portal', url: 'https://trai.gov.in/consumers', note: 'Escalate telecom operator inaction' },
+    { label: 'DoT Sanchar Saathi', url: 'https://sancharsaathi.gov.in', note: 'Report suspicious SIM activity and telecom misuse' },
+  ],
+  ransomware: [
+    { label: 'National Cyber Crime Portal', url: 'https://cybercrime.gov.in', note: 'Report malware, data theft, and ransomware extortion' },
+    { label: 'CERT-In', url: 'https://www.cert-in.org.in', note: 'National incident response advisory and reporting' },
+  ],
+  phishing: [
+    { label: 'National Cyber Crime Portal', url: 'https://cybercrime.gov.in', note: 'Report phishing domains/messages and credential theft' },
+    { label: 'Google Safe Browsing Report', url: 'https://safebrowsing.google.com/safebrowsing/report_phish/', note: 'Report phishing URLs for browser blocking' },
+  ],
+  'tech-support': [
+    { label: 'National Cyber Crime Portal', url: 'https://cybercrime.gov.in', note: 'Report fake customer care and remote-access fraud' },
+    { label: 'Consumer Forum', url: 'https://consumerhelpline.gov.in', note: 'Raise complaint for fake support/unauthorized charges' },
   ],
   ecommerce: [
     { label: 'National Cyber Crime Portal', url: 'https://cybercrime.gov.in', note: 'Report e-commerce fraud' },
@@ -60,6 +109,117 @@ const REPORTING_LINKS = {
   other: [
     { label: 'National Cyber Crime Portal', url: 'https://cybercrime.gov.in', note: 'All types of cyber crime' },
     { label: 'Call 1930 (24×7)', url: 'tel:1930', note: 'National Cyber Crime Helpline — immediate help' },
+  ],
+};
+
+const SOLUTION_GUIDES = {
+  upi: [
+    'Call 1930 immediately and share the UTR/transaction reference number.',
+    'Ask your bank to put a debit freeze and flag beneficiary account as fraud.',
+    'Raise UPI dispute through your app and NPCI dispute redressal link.',
+    'Keep screenshots of chat/payment page/QR code as evidence.',
+  ],
+  otp: [
+    'Block net banking, cards, and UPI from your bank helpline immediately.',
+    'Change all account passwords and UPI PIN from a secure device.',
+    'Report unauthorized transactions and ask bank for chargeback process.',
+    'Preserve SMS/call logs containing OTP phishing messages.',
+  ],
+  job: [
+    'Stop all further payments for interview/registration/document verification.',
+    'Collect job ad, recruiter chats, and payment proof screenshots.',
+    'Report fake recruiter phone/email on cybercrime portal.',
+    'Warn others in your network to prevent repeat victimization.',
+  ],
+  investment: [
+    'Stop transfer of additional funds to broker/telegram group immediately.',
+    'Download wallet/bank statements and all transaction IDs.',
+    'Report the platform on SEBI SCORES and cybercrime portal.',
+    'Capture URLs and social media handles used by scammers.',
+  ],
+  crypto: [
+    'Immediately stop all wallet transfers and revoke DApp permissions if any were granted.',
+    'Export transaction hashes, wallet addresses, and screenshots from exchange/app.',
+    'Report wallet addresses and handles used by scammers in complaint portal.',
+    'Inform your bank/payment gateway if INR on-ramp was used for scam transfer.',
+  ],
+  lottery: [
+    'Do not pay taxes/processing charges to claim fake prize.',
+    'Keep screenshots of winning message and demand notices.',
+    'Report sender number/email and payment channel used.',
+  ],
+  loan: [
+    'Revoke app permissions and uninstall suspicious loan app.',
+    'Block your bank/UPI and report coercive recovery threats.',
+    'Complain to RBI Ombudsman for illegal digital lending.',
+  ],
+  romance: [
+    'Cease contact and block accounts after collecting evidence.',
+    'Save all chats, profile links, and transfer records.',
+    'Report account to platform and cybercrime portal.',
+  ],
+  'social-hack': [
+    'Log out all active sessions and reset password from recovery flow.',
+    'Enable 2-factor authentication immediately after account recovery.',
+    'Capture unauthorized posts/messages and unknown login alerts as proof.',
+    'Alert contacts that your account was compromised to prevent cascade scams.',
+  ],
+  sextortion: [
+    'Do not pay any blackmail demand; payment usually escalates threats.',
+    'Preserve profile links, payment requests, and chat screenshots.',
+    'Block offender only after collecting enough proof for police.',
+    'Report urgently under women/child safety category if applicable.',
+  ],
+  impersonation: [
+    'Do not share OTP/KYC documents with caller claiming official identity.',
+    'Record call details, number, and fraud claims made.',
+    'Verify with official website/helpline before any action.',
+  ],
+  'deepfake-video': [
+    'Preserve original video, share links, and timestamps before content is removed.',
+    'Collect account IDs or channel names that published the manipulated video.',
+    'State impact clearly (reputation, financial demand, identity misuse) in complaint.',
+  ],
+  'deepfake-audio': [
+    'Save call recordings/voice notes and the exact caller number.',
+    'Verify suspicious voice calls through secondary contact method before payment.',
+    'Mention voice cloning suspicion and requested transaction details in FIR template.',
+  ],
+  'deepfake-image': [
+    'Preserve original media files and metadata if available.',
+    'Capture source links and accounts spreading the content.',
+    'Report under identity theft/impersonation categories at cybercrime portal.',
+  ],
+  'sim-swap': [
+    'Ask telecom operator to block SIM and re-issue securely after identity verification.',
+    'Freeze banking channels because OTP access may be compromised.',
+    'Collect service-request IDs and timestamps from telecom support.',
+  ],
+  ransomware: [
+    'Disconnect infected system from network to contain spread.',
+    'Do not pay ransom without expert/legal consultation.',
+    'Preserve ransom note, suspicious email, and encrypted file samples.',
+    'Restore from clean backup after forensic capture of evidence.',
+  ],
+  phishing: [
+    'Change compromised passwords immediately and enable 2FA.',
+    'Revoke unknown sessions and app integrations in account settings.',
+    'Report phishing URL and attach screenshots of fake login pages.',
+  ],
+  'tech-support': [
+    'Uninstall remote-access tools used by fake support scammers.',
+    'Run malware scan and rotate banking/email passwords on clean device.',
+    'Dispute unauthorized charges with bank/card provider quickly.',
+  ],
+  ecommerce: [
+    'Dispute transaction with bank/card provider and request reversal.',
+    'Report fake seller/order link on platform support.',
+    'Save order confirmation, invoice, and chat logs as evidence.',
+  ],
+  other: [
+    'Call 1930 first for immediate fund-freeze support.',
+    'Collect all transaction proofs and communication logs.',
+    'File complaint at cybercrime.gov.in and keep acknowledgment number.',
   ],
 };
 
@@ -120,15 +280,21 @@ File online FIR at: https://cybercrime.gov.in
 ─────────────────────────────────────────`;
 }
 
-export default function ComplaintTemplate({ user }) {
+export default function ComplaintTemplate({ user, initialData }) {
   const [step, setStep] = useState(1);
   const [copied, setCopied] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [savedStatus, setSavedStatus] = useState(null);
   const [formData, setFormData] = useState({
-    name: '', date: '', amount: '', platform: '',
+    name: user?.name && !user?.isGuest ? user.name : '', date: '', amount: '', platform: '',
     fraudType: '', description: '', scammerDetails: '',
   });
+
+  useEffect(() => {
+    if (!initialData) return;
+    setFormData(prev => ({ ...prev, ...initialData }));
+    if (initialData.fraudType) setStep(2);
+  }, [initialData]);
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -136,12 +302,66 @@ export default function ComplaintTemplate({ user }) {
 
   const template = formData.fraudType ? generateTemplate(formData) : '';
   const links = REPORTING_LINKS[formData.fraudType] || REPORTING_LINKS.other;
+  const solutions = SOLUTION_GUIDES[formData.fraudType] || SOLUTION_GUIDES.other;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(template).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
+  };
+
+  const downloadAsPdf = () => {
+    if (!template) return;
+
+    const esc = (s) =>
+      String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
+    const fileTitle = `${(formData.fraudType || 'cyber-fraud')}-complaint-template`;
+    const html = `<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>${esc(fileTitle)}</title>
+    <style>
+      body { font-family: Arial, Helvetica, sans-serif; margin: 28px; color: #111; }
+      h1 { font-size: 18px; margin: 0 0 12px; }
+      .meta { font-size: 12px; color: #444; margin-bottom: 16px; }
+      pre {
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 12px;
+        line-height: 1.55;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 14px;
+      }
+      @page { margin: 18mm; }
+    </style>
+  </head>
+  <body>
+    <h1>Cyber Fraud Complaint Template</h1>
+    <div class="meta">Generated by Sentinel One</div>
+    <pre>${esc(template)}</pre>
+    <script>
+      window.onload = function () {
+        window.print();
+      };
+    </script>
+  </body>
+</html>`;
+
+    const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=900,height=700');
+    if (!printWindow) return;
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
   };
 
   const saveComplaintToDb = async () => {
@@ -174,6 +394,12 @@ export default function ComplaintTemplate({ user }) {
         <span className="section-subtitle">For victims — create FIR-ready complaint</span>
       </div>
 
+      <div className="complaint-stepper" aria-label="Complaint flow progress">
+        <div className={`complaint-step-chip ${step === 1 ? 'active' : step > 1 ? 'done' : ''}`}>1. Choose Fraud Type</div>
+        <div className={`complaint-step-chip ${step === 2 ? 'active' : step > 2 ? 'done' : ''}`}>2. Fill Incident Details</div>
+        <div className={`complaint-step-chip ${step === 3 ? 'active' : ''}`}>3. Generate, Copy & Submit</div>
+      </div>
+
       {/* Warning banner */}
       <div className="complaint-warning">
         <span style={{ fontSize: '20px' }}>🚨</span>
@@ -188,7 +414,7 @@ export default function ComplaintTemplate({ user }) {
 
       {/* Step 1 — Fraud Type */}
       {step === 1 && (
-        <div className="glass-card" style={{ padding: '20px' }}>
+        <div className="glass-card complaint-card" style={{ padding: '20px' }}>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '14px' }}>
             Select the type of fraud you experienced:
           </p>
@@ -209,11 +435,11 @@ export default function ComplaintTemplate({ user }) {
 
       {/* Step 2 — Fill Details */}
       {step === 2 && (
-        <div className="glass-card" style={{ padding: '20px' }}>
+        <div className="glass-card complaint-card" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
             <button
               onClick={() => setStep(1)}
-              style={{ background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 'var(--r-sm)', padding: '5px 12px', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '12px' }}
+              className="tertiary-btn"
             >
               ← Back
             </button>
@@ -224,6 +450,22 @@ export default function ComplaintTemplate({ user }) {
           </div>
 
           <div className="form-grid">
+            <div className="form-group full" style={{
+              background: 'rgba(59,130,246,0.08)',
+              border: '1px solid rgba(59,130,246,0.22)',
+              borderRadius: 'var(--r-md)',
+              padding: '12px',
+            }}>
+              <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Suggested Recovery Steps For This Fraud</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {solutions.map((s, i) => (
+                  <div key={i} style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                    <span style={{ color: 'var(--blue)', fontWeight: 700 }}>{i + 1}.</span>{' '}{s}
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className="form-group">
               <label className="form-label">Your Full Name</label>
               <input className="form-input" name="name" placeholder="e.g., Rajesh Kumar" value={formData.name} onChange={handleChange} />
@@ -259,8 +501,7 @@ export default function ComplaintTemplate({ user }) {
           </div>
 
           <button
-            className="scan-btn"
-            style={{ width: '100%', justifyContent: 'center', marginTop: '16px' }}
+            className="scan-btn complaint-generate-btn"
             onClick={() => setStep(3)}
           >
             Generate Complaint Template ⚡
@@ -270,20 +511,25 @@ export default function ComplaintTemplate({ user }) {
 
       {/* Step 3 — Generated Template + Links */}
       {step === 3 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <div style={{ display: 'flex', gap: '8px' }}>
+        <div className="complaint-step3">
+          <div className="complaint-actions">
             <button
               onClick={() => setStep(2)}
-              style={{ background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 'var(--r-sm)', padding: '8px 14px', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '12px' }}
+              className="tertiary-btn"
             >
               ← Edit Details
             </button>
             <button
               onClick={copyToClipboard}
-              className="scan-btn"
-              style={{ flex: 1, justifyContent: 'center' }}
+              className="scan-btn complaint-action-btn"
             >
               {copied ? '✅ Copied!' : '📋 Copy Complaint Template'}
+            </button>
+            <button
+              onClick={downloadAsPdf}
+              className="scan-btn complaint-action-btn"
+            >
+              🧾 Download PDF
             </button>
           </div>
           
@@ -291,14 +537,7 @@ export default function ComplaintTemplate({ user }) {
             <button
               onClick={saveComplaintToDb}
               disabled={isSaving || savedStatus === 'success'}
-              style={{ 
-                background: savedStatus === 'success' ? 'var(--green-dim)' : 'var(--bg-3)', 
-                border: `1px solid ${savedStatus === 'success' ? 'var(--green)' : 'var(--blue)'}`, 
-                borderRadius: 'var(--r-sm)', padding: '10px 14px', 
-                color: savedStatus === 'success' ? 'var(--green)' : 'var(--blue)', 
-                cursor: 'pointer', fontSize: '13px', fontWeight: 600,
-                transition: 'all 0.2s', width: '100%'
-              }}
+              className={`save-record-btn ${savedStatus === 'success' ? 'saved' : ''}`}
             >
               {isSaving ? 'Saving...' : savedStatus === 'success' ? '✅ Saved securely to your account' : '💾 Save Record to Dashboard'}
             </button>

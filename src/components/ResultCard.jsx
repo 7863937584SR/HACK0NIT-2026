@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getModuleName } from '../engine/fraudEngine';
 import audioAlerts from '../engine/audioAlerts';
 
-export default function ResultCard({ result, onClose, onReportFraud }) {
+export default function ResultCard({ result, onClose, onReportFraud, onGetSolutions }) {
   const [showReasons, setShowReasons] = useState(true);
   const [animatedScore, setAnimatedScore] = useState(0);
   const [muted, setMuted] = useState(() => localStorage.getItem('db-mute') === 'true');
@@ -170,20 +170,22 @@ export default function ResultCard({ result, onClose, onReportFraud }) {
         <div className={`action-box ${levelClass}`}>
           <strong>💡 Recommended Action:</strong><br />
           {result.action}
+
+          {onGetSolutions && (
+            <button
+              onClick={onGetSolutions}
+              className="result-cta secondary"
+            >
+              Get Complete Solution Plan + Report Template
+            </button>
+          )}
           
-          {result.level === 'High' && onReportFraud && (
+          {onReportFraud && (
             <button 
               onClick={onReportFraud}
-              style={{
-                display: 'block', width: '100%', marginTop: '14px',
-                background: 'var(--red)', color: 'white', padding: '10px',
-                borderRadius: 'var(--radius-sm)', border: 'none',
-                fontWeight: 600, fontSize: '13px', cursor: 'pointer',
-                boxShadow: '0 4px 14px rgba(244,63,94,0.3)',
-                animation: 'pulse 2s infinite'
-              }}
+              className={`result-cta ${result.level === 'Safe' ? 'neutral' : 'danger'}`}
             >
-              Victim of this fraud? Generate FIR Complaint 📝
+              {result.level === 'Safe' ? 'Need to file a report anyway? Open Complaint Generator 📝' : 'Victim of this fraud? Generate FIR Complaint 📝'}
             </button>
           )}
         </div>

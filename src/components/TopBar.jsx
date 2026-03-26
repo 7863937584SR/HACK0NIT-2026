@@ -1,11 +1,15 @@
+import appLogo from '../assets/vite.svg';
+
 export default function TopBar({ user, onLogout, onGoToVault }) {
   return (
     <header className="topbar">
       <div className="topbar-logo">
-        <div className="topbar-logo-icon">🛡️</div>
+        <div className="topbar-logo-icon" aria-hidden="true">
+          <img src={appLogo} alt="" className="topbar-logo-image" />
+        </div>
         <div>
           <div className="topbar-title">Sentinel One</div>
-          <div className="topbar-subtitle">Sentinel One</div>
+          <div className="topbar-subtitle">SENTINEL AI</div>
         </div>
       </div>
       

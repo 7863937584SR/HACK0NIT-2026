@@ -14,10 +14,13 @@ export default function BottomNav({ activeView, onViewChange }) {
         {items.map(item => (
           <button
             key={item.id}
-            className={`bottom-nav-btn ${activeView === item.id ? 'active' : ''}`}
+            className={`bottom-nav-btn ${activeView === item.id ? 'active' : ''} ${item.id === 'complaint' ? 'report-hot' : ''}`}
             onClick={() => onViewChange(item.id)}
           >
-            <span>{item.icon}</span>
+            <span className="bottom-nav-icon-wrap">
+              {item.icon}
+              {item.id === 'complaint' && activeView !== 'complaint' && <span className="report-hot-dot" aria-hidden="true">!</span>}
+            </span>
             {item.label}
           </button>
         ))}

@@ -42,6 +42,7 @@ function App() {
   const [activeModule, setActiveModule] = useState(null);
   const [history, setHistory] = useState([]);
   const [activeView, setActiveView] = useState('home');
+  const [complaintPrefill, setComplaintPrefill] = useState(null);
   const [stats, setStats] = useState({ total: 0, highRisk: 0, commonScam: 'OTP Phishing' });
 
   // Auth state — check localStorage on mount
@@ -54,6 +55,47 @@ function App() {
     } catch {}
     return null;
   });
+
+  const inferFraudType = useCallback((scanResult) => {
+    if (!scanResult) return 'other';
+    const text = [
+      scanResult.inputType,
+      scanResult.explanation,
+      scanResult.action,
+      ...(scanResult.reasons || []),
+    ].join(' ').toLowerCase();
+
+    if (/deepfake|synthetic media|ai voice|face swap/.test(text)) return 'deepfake';
+    if (/upi|collect request|qr|transaction|bank transfer|wallet/.test(text)) return 'upi';
+    if (/otp|kyc|bank|account block|card|net banking/.test(text)) return 'otp';
+    if (/job|interview|hr|joining fee/.test(text)) return 'job';
+    if (/investment|trading|crypto|double money|returns/.test(text)) return 'investment';
+    if (/lottery|prize|winner|gift/.test(text)) return 'lottery';
+    if (/loan app|instant loan|credit score|processing fee/.test(text)) return 'loan';
+    if (/romance|dating|matrimony/.test(text)) return 'romance';
+    if (/impersonat|rbi|government|police|officer/.test(text)) return 'impersonation';
+    if (/delivery|courier|parcel|e-?commerce|refund scam/.test(text)) return 'ecommerce';
+    return 'other';
+  }, []);
+
+  const handleGetFraudHelp = useCallback((scanResult) => {
+    if (!scanResult) return;
+
+    const fraudType = inferFraudType(scanResult);
+    const incidentSummary = [
+      `Automated scan marked this as ${scanResult.level} risk (${scanResult.score}/100).`,
+      `Detected module: ${getModuleName(scanResult.inputType)}.`,
+      ...(scanResult.reasons || []).slice(0, 6),
+    ].join('\n');
+
+    setComplaintPrefill({
+      name: user?.name && !user?.isGuest ? user.name : '',
+      fraudType,
+      description: incidentSummary,
+      platform: getModuleName(scanResult.inputType),
+    });
+    setActiveView('complaint');
+  }, [inferFraudType, user]);
 
   const handleAuth = (u) => setUser(u);
   const handleLogout = () => {
@@ -199,7 +241,11 @@ function App() {
               <ResultCard 
                 result={result} 
                 onClose={clearResult} 
-                onReportFraud={() => { setActiveView('complaint'); clearResult(false); }}
+                onReportFraud={() => {
+                  handleGetFraudHelp(result);
+                  clearResult(false);
+                }}
+                onGetSolutions={() => handleGetFraudHelp(result)}
               />
             )}
             
@@ -238,7 +284,11 @@ function App() {
               <ResultCard 
                 result={result} 
                 onClose={clearResult}
-                onReportFraud={() => { setActiveView('complaint'); clearResult(false); }} 
+                onReportFraud={() => {
+                  handleGetFraudHelp(result);
+                  clearResult(false);
+                }}
+                onGetSolutions={() => handleGetFraudHelp(result)}
               />
             )}
             <ModuleGrid 
@@ -249,7 +299,7 @@ function App() {
         )}
         
         {activeView === 'complaint' && (
-          <ComplaintTemplate user={user} />
+          <ComplaintTemplate user={user} initialData={complaintPrefill} />
         )}
         
         {activeView === 'history' && (
