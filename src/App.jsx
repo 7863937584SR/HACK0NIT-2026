@@ -254,16 +254,12 @@ function App() {
               <ResultCard 
                 result={result} 
                 onClose={clearResult} 
-<<<<<<< HEAD
                 onReportFraud={() => {
                   handleGetFraudHelp(result);
                   clearResult(false);
                 }}
                 onGetSolutions={() => handleGetFraudHelp(result)}
-=======
-                onReportFraud={() => { setActiveView('complaint'); clearResult(false); }}
                 onGenerateReport={handleGenerateReport}
->>>>>>> 1a3234afe6b68e9b805e6502657ded25116cb04b
               />
             )}
             
@@ -302,16 +298,12 @@ function App() {
               <ResultCard 
                 result={result} 
                 onClose={clearResult}
-<<<<<<< HEAD
                 onReportFraud={() => {
                   handleGetFraudHelp(result);
                   clearResult(false);
                 }}
                 onGetSolutions={() => handleGetFraudHelp(result)}
-=======
-                onReportFraud={() => { setActiveView('complaint'); clearResult(false); }}
                 onGenerateReport={handleGenerateReport}
->>>>>>> 1a3234afe6b68e9b805e6502657ded25116cb04b
               />
             )}
             <ModuleGrid 

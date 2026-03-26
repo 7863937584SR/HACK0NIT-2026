@@ -1,5 +1,19 @@
 import { useState, useEffect } from 'react';
-import * as openpgp from 'openpgp';
+
+const encodeBase64 = (text) => {
+  const bytes = new TextEncoder().encode(text);
+  let binary = '';
+  bytes.forEach((b) => {
+    binary += String.fromCharCode(b);
+  });
+  return btoa(binary);
+};
+
+const decodeBase64 = (encoded) => {
+  const binary = atob(encoded);
+  const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+};
 
 export default function FraudReportGenerator({ result, user, onClose }) {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -17,9 +31,10 @@ export default function FraudReportGenerator({ result, user, onClose }) {
       if (storedKey) {
         try {
           const keys = JSON.parse(storedKey);
-          const privateKey = await openpgp.readPrivateKey({ armoredKey: keys.privateKey });
-          const publicKey = await openpgp.readKey({ armoredKey: keys.publicKey });
-          setUserKeyPair({ privateKey, publicKey });
+          setUserKeyPair({
+            privateKey: keys.privateKey || 'mock-private-key',
+            publicKey: keys.publicKey || 'mock-public-key',
+          });
         } catch (error) {
           console.error('Error loading stored keys:', error);
           generateNewKeyPair();
@@ -29,21 +44,12 @@ export default function FraudReportGenerator({ result, user, onClose }) {
       }
     };
 
-    const generateNewKeyPair = async () => {
+    const generateNewKeyPair = () => {
       try {
-        // Use smaller key size and simpler configuration for faster generation
-        const { privateKey, publicKey } = await openpgp.generateKey({
-          type: 'ecc', // Use ECC instead of RSA for faster generation
-          curve: 'curve25519', // Modern and fast elliptic curve
-          userIDs: [{ name: user.name, email: user.email || `${user.id}@sentinel.one` }],
-          passphrase: '', // No passphrase for better UX in browser
-          format: 'armored'
-        });
-
-        const privKey = await openpgp.readPrivateKey({ armoredKey: privateKey });
-        const pubKey = await openpgp.readKey({ armoredKey: publicKey });
-        
-        setUserKeyPair({ privateKey: privKey, publicKey: pubKey });
+        // Local pseudo-key placeholders for wallet UX without external crypto dependency.
+        const privateKey = `local-private-${user.id}-${Date.now()}`;
+        const publicKey = `local-public-${user.id}`;
+        setUserKeyPair({ privateKey, publicKey });
         
         localStorage.setItem(`gpg-key-${user.id}`, JSON.stringify({
           privateKey,
@@ -109,20 +115,8 @@ export default function FraudReportGenerator({ result, user, onClose }) {
       };
 
       const reportText = formatReportText(reportData);
-      
-      // Check if we have mock keys (fallback mode)
-      if (userKeyPair.privateKey === 'mock-private-key') {
-        // Fallback: simple base64 encoding for demo
-        const encoded = btoa(reportText);
-        setEncryptedReport(encoded);
-      } else {
-        // Real GPG encryption
-        const encrypted = await openpgp.encrypt({
-          message: await openpgp.createMessage({ text: reportText }),
-          encryptionKeys: userKeyPair.publicKey,
-        });
-        setEncryptedReport(encrypted);
-      }
+      const encoded = encodeBase64(reportText);
+      setEncryptedReport(encoded);
       
       // Save to wallet
       const newReport = {
@@ -130,7 +124,7 @@ export default function FraudReportGenerator({ result, user, onClose }) {
         timestamp: reportData.timestamp,
         fraudType: reportData.fraudType,
         riskLevel: reportData.riskLevel,
-        encryptedData: encryptedReport || btoa(reportText),
+        encryptedData: encoded,
         isDecrypted: false
       };
 
@@ -150,7 +144,7 @@ export default function FraudReportGenerator({ result, user, onClose }) {
         riskScore: result.score,
         reportId: `FR-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
       });
-      const encoded = btoa(reportText);
+      const encoded = encodeBase64(reportText);
       setEncryptedReport(encoded);
     } finally {
       setIsGenerating(false);
@@ -220,24 +214,8 @@ System Version: Sentinel One v2.0
     if (!userKeyPair || !report.encryptedData) return;
 
     try {
-      // Check if we have mock keys (fallback mode)
-      if (userKeyPair.privateKey === 'mock-private-key') {
-        // Fallback: simple base64 decoding
-        const decrypted = atob(report.encryptedData);
-        setDecryptedContent(decrypted);
-      } else {
-        // Real GPG decryption
-        const message = await openpgp.readMessage({
-          armoredMessage: report.encryptedData
-        });
-
-        const { data: decrypted } = await openpgp.decrypt({
-          message,
-          decryptionKeys: userKeyPair.privateKey,
-        });
-
-        setDecryptedContent(decrypted);
-      }
+      const decrypted = decodeBase64(report.encryptedData);
+      setDecryptedContent(decrypted);
       
       // Update report status
       const updatedWallet = walletReports.map(r => 
@@ -250,7 +228,7 @@ System Version: Sentinel One v2.0
       console.error('Error decrypting report:', error);
       // Try fallback decryption
       try {
-        const decrypted = atob(report.encryptedData);
+        const decrypted = decodeBase64(report.encryptedData);
         setDecryptedContent(decrypted);
       } catch (fallbackError) {
         setDecryptedContent('Error: Unable to decrypt report');

@@ -2,11 +2,7 @@ import { useState, useEffect } from 'react';
 import { getModuleName } from '../engine/fraudEngine';
 import audioAlerts from '../engine/audioAlerts';
 
-<<<<<<< HEAD
-export default function ResultCard({ result, onClose, onReportFraud, onGetSolutions }) {
-=======
-export default function ResultCard({ result, onClose, onReportFraud, onGenerateReport }) {
->>>>>>> 1a3234afe6b68e9b805e6502657ded25116cb04b
+export default function ResultCard({ result, onClose, onReportFraud, onGetSolutions, onGenerateReport }) {
   const [showReasons, setShowReasons] = useState(true);
   const [animatedScore, setAnimatedScore] = useState(0);
   const [muted, setMuted] = useState(() => localStorage.getItem('db-mute') === 'true');
