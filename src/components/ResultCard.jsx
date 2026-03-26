@@ -2,7 +2,11 @@ import { useState, useEffect } from 'react';
 import { getModuleName } from '../engine/fraudEngine';
 import audioAlerts from '../engine/audioAlerts';
 
+<<<<<<< HEAD
 export default function ResultCard({ result, onClose, onReportFraud, onGetSolutions }) {
+=======
+export default function ResultCard({ result, onClose, onReportFraud, onGenerateReport }) {
+>>>>>>> 1a3234afe6b68e9b805e6502657ded25116cb04b
   const [showReasons, setShowReasons] = useState(true);
   const [animatedScore, setAnimatedScore] = useState(0);
   const [muted, setMuted] = useState(() => localStorage.getItem('db-mute') === 'true');
@@ -186,6 +190,21 @@ export default function ResultCard({ result, onClose, onReportFraud, onGetSoluti
               className={`result-cta ${result.level === 'Safe' ? 'neutral' : 'danger'}`}
             >
               {result.level === 'Safe' ? 'Need to file a report anyway? Open Complaint Generator 📝' : 'Victim of this fraud? Generate FIR Complaint 📝'}
+            </button>
+          )}
+          
+          {onGenerateReport && (
+            <button 
+              onClick={() => onGenerateReport(result)}
+              style={{
+                display: 'block', width: '100%', marginTop: '8px',
+                background: 'var(--neon-blue)', color: 'white', padding: '10px',
+                borderRadius: 'var(--radius-sm)', border: 'none',
+                fontWeight: 600, fontSize: '13px', cursor: 'pointer',
+                boxShadow: '0 4px 14px rgba(59,130,246,0.3)'
+              }}
+            >
+              🔐 Generate GPG Encrypted Report 💼
             </button>
           )}
         </div>
