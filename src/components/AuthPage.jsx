@@ -122,7 +122,7 @@ export default function AuthPage({ onAuth }) {
         <div className="auth-logo">
           <div className="auth-logo-icon">🛡️</div>
           <div>
-            <div className="auth-logo-title">Digital Bandhu</div>
+            <div className="auth-logo-title">Sentinel One</div>
             <div className="auth-logo-sub">SENTINEL AI</div>
           </div>
         </div>
@@ -149,7 +149,7 @@ export default function AuthPage({ onAuth }) {
             {/* Welcome text */}
             <div className="auth-welcome">
               <h1 className="auth-title">
-                {mode === 'login' ? 'Welcome back' : 'Join Digital Bandhu'}
+                {mode === 'login' ? 'Welcome back' : 'Join Sentinel One'}
               </h1>
               <p className="auth-sub">
                 {mode === 'login'

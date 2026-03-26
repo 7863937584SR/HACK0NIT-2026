@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Sentinel One",
+  "version": "1.0.0",
+  "description": "Real-time AI-powered cyber fraud detection for Indian users. Scan messages, URLs, and UPI IDs instantly.",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Open Sentinel One"
+  },
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "http://localhost:3001/*"
+  ]
+}

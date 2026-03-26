@@ -2,13 +2,13 @@ export default function AboutSection() {
   return (
     <div className="about-section animate-fade-in">
       <div className="section-header">
-        <h2 className="section-title">🛡️ About Digital Bandhu</h2>
+        <h2 className="section-title">🛡️ About Sentinel One</h2>
       </div>
 
       {/* How it works */}
       <div className="glass-card" style={{ padding: '24px', marginBottom: '12px' }}>
         <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '16px', fontFamily: 'var(--font-display)' }}>
-          🧠 How Sentinel AI Works
+          🧠 How Sentinel One Works
         </h3>
         <div className="how-it-works-grid">
           {[
@@ -98,7 +98,7 @@ export default function AboutSection() {
       {/* Team / Credits */}
       <div className="glass-card" style={{ padding: '20px', textAlign: 'center' }}>
         <p style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px', fontFamily: 'var(--font-display)' }}>
-          🛡️ Digital Bandhu — Sentinel AI v2.0
+          🛡️ Sentinel One v2.0
         </p>
         <p style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.6 }}>
           Built for India 🇮🇳 • Protecting citizens from digital fraud<br/>

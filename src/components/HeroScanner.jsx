@@ -101,7 +101,7 @@ export default function HeroScanner({ onScan, isScanning, moduleHint }) {
   return (
     <section className="hero-section">
       <div className="hero-badge">
-        🤖 Powered by Sentinel AI — Explainable Fraud Detection
+        🤖 Powered by Sentinel One — Explainable Fraud Detection
       </div>
       <h1 className="hero-title">
         Scan <span>Anything</span> Instantly

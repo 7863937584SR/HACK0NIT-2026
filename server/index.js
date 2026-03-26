@@ -158,6 +158,16 @@ app.post('/api/complaints', (req, res) => {
   });
 });
 
+// 6. Complaints: Get User Complaints
+app.get('/api/complaints/:userId', (req, res) => {
+  const { userId } = req.params;
+  const query = `SELECT * FROM complaints WHERE userId = ? ORDER BY createdAt DESC`;
+  db.all(query, [userId], (err, rows) => {
+    if (err) return res.status(500).json({ error: 'Database error' });
+    res.json(rows);
+  });
+});
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`🚀 API Server running on http://localhost:${PORT}`);

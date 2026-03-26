@@ -16,6 +16,10 @@ import DeepfakeChecker from './components/DeepfakeChecker';
 import ScanAnimation from './components/ScanAnimation';
 import AboutSection from './components/AboutSection';
 import ComplaintTemplate from './components/ComplaintTemplate';
+import ComplaintsVault from './components/ComplaintsVault';
+import FraudGuide from './components/FraudGuide';
+import CyberNumbers from './components/CyberNumbers';
+import CyberLaws from './components/CyberLaws';
 import AuthPage from './components/AuthPage';
 
 // Sample alerts for live feed
@@ -167,7 +171,7 @@ function App() {
 
   return (
     <div className="app">
-      <TopBar user={user} onLogout={handleLogout} />
+      <TopBar user={user} onLogout={handleLogout} onGoToVault={() => setActiveView('vault')} />
       
       <main className="main-content">
         {activeView === 'home' && (
@@ -192,7 +196,11 @@ function App() {
             
             {/* Results */}
             {result && (
-              <ResultCard result={result} onClose={clearResult} />
+              <ResultCard 
+                result={result} 
+                onClose={clearResult} 
+                onReportFraud={() => { setActiveView('complaint'); clearResult(false); }}
+              />
             )}
             
             {/* Module Grid */}
@@ -226,7 +234,13 @@ function App() {
             {showTransactionForm && <TransactionAnalyzer onScan={handleCustomResult} />}
             {showDeepfakeChecker && <DeepfakeChecker onScan={handleCustomResult} />}
             <ScanAnimation isScanning={isScanning} />
-            {result && <ResultCard result={result} onClose={clearResult} />}
+            {result && (
+              <ResultCard 
+                result={result} 
+                onClose={clearResult}
+                onReportFraud={() => { setActiveView('complaint'); clearResult(false); }} 
+              />
+            )}
             <ModuleGrid 
               activeModule={activeModule}
               onModuleSelect={handleModuleSelect}
@@ -242,40 +256,23 @@ function App() {
           <ScanHistory history={history} showAll />
         )}
         
-        {activeView === 'laws' && (
-          <div className="laws-section animate-fade-in">
-            <div className="section-header">
-              <h2 className="section-title">🏛️ Cyber Laws & Resources</h2>
-            </div>
-            <div className="laws-grid">
-              {[
-                { title: 'IT Act 2000 — Section 66C', desc: 'Identity theft using electronic signature, password or unique identification feature. Punishment: Imprisonment up to 3 years + fine up to ₹1 lakh.', icon: '📜' },
-                { title: 'IT Act 2000 — Section 66D', desc: 'Cheating by personation using computer resource. Punishment: Imprisonment up to 3 years + fine up to ₹1 lakh.', icon: '📜' },
-                { title: 'IT Act 2000 — Section 43', desc: 'Penalty and compensation for damage to computer, computer system, etc. Liable to pay damages up to ₹1 crore.', icon: '📜' },
-                { title: 'IT Act 2000 — Section 66', desc: 'Computer related offences including hacking. Punishment: Imprisonment up to 3 years or fine up to ₹5 lakh.', icon: '📜' },
-                { title: 'IT Act 2000 — Section 67', desc: 'Publishing or transmitting obscene material in electronic form. Imprisonment up to 5 years + fine up to ₹10 lakh.', icon: '📜' },
-                { title: 'IPC Section 420', desc: 'Cheating and dishonestly inducing delivery of property. Punishment: Imprisonment up to 7 years + fine.', icon: '⚖️' },
-                { title: 'IPC Section 468', desc: 'Forgery for purpose of cheating. Punishment: Imprisonment up to 7 years + fine.', icon: '⚖️' },
-                { title: 'IPC Section 471', desc: 'Using as genuine a forged document or electronic record.', icon: '⚖️' },
-                { title: 'RBI Guidelines on Digital Fraud', desc: 'Zero liability for unauthorized electronic banking transactions if reported within 3 working days. Limited liability (₹25,000) if reported within 4–7 days.', icon: '🏦' },
-                { title: 'TRAI DND Regulations', desc: 'Register on Do Not Disturb (DND) list by sending SMS "START 0" to 1909. Report spam calls/SMS to TRAI.', icon: '📱' },
-                { title: 'National Cyber Crime Helpline', desc: 'Call 1930 (24/7) to report cyber fraud immediately. The sooner you report, the higher chances of fund recovery.', icon: '📞' },
-                { title: 'Online Complaint Portal', desc: 'File FIR online at cybercrime.gov.in — National Cyber Crime Reporting Portal by Ministry of Home Affairs.', icon: '🌐' },
-              ].map((law, i) => (
-                <div key={i} className="glass-card" style={{ padding: '16px', marginBottom: '8px' }}>
-                  <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                    <span style={{ fontSize: '24px' }}>{law.icon}</span>
-                    <div>
-                      <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px' }}>{law.title}</h4>
-                      <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>{law.desc}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+        {activeView === 'vault' && (
+          <ComplaintsVault user={user} />
         )}
-        
+
+
+        {activeView === 'guide' && (
+          <FraudGuide />
+        )}
+
+        {activeView === 'numbers' && (
+          <CyberNumbers />
+        )}
+
+        {activeView === 'laws' && (
+          <CyberLaws />
+        )}
+
         {activeView === 'settings' && (
           <div className="settings-section animate-fade-in">
             <div className="section-header">
@@ -320,7 +317,7 @@ function App() {
             
             <div className="glass-card" style={{ padding: '16px', marginTop: '12px', textAlign: 'center' }}>
               <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '4px' }}>
-                <strong>Digital Bandhu v2.0</strong> — Sentinel AI
+                <strong>Sentinel One v2.0</strong> — Sentinel One
               </p>
               <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
                 🔒 All processing happens on your device. No data is sent to any server.<br/>

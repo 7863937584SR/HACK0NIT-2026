@@ -1,11 +1,11 @@
-export default function TopBar({ user, onLogout }) {
+export default function TopBar({ user, onLogout, onGoToVault }) {
   return (
     <header className="topbar">
       <div className="topbar-logo">
         <div className="topbar-logo-icon">🛡️</div>
         <div>
-          <div className="topbar-title">Digital Bandhu</div>
-          <div className="topbar-subtitle">Sentinel AI</div>
+          <div className="topbar-title">Sentinel One</div>
+          <div className="topbar-subtitle">Sentinel One</div>
         </div>
       </div>
       
@@ -25,6 +25,14 @@ export default function TopBar({ user, onLogout }) {
               <span className="user-avatar">{user.avatar}</span>
               <span className="user-name">{user.name}</span>
             </div>
+            <button 
+              className="topbar-btn" 
+              onClick={onGoToVault} 
+              title="My Complaints Vault" 
+              style={{ background: 'var(--bg-3)', fontSize: '14px', padding: '0 12px' }}
+            >
+              🛡️ Vault
+            </button>
             <button className="topbar-btn" onClick={onLogout} title="Sign Out" aria-label="Sign Out">
               🚪
             </button>

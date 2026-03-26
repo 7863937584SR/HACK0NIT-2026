@@ -3,8 +3,9 @@ export default function BottomNav({ activeView, onViewChange }) {
     { id: 'home',      icon: '🏠', label: 'Home'     },
     { id: 'complaint', icon: '📋', label: 'Report'   },
     { id: 'history',   icon: '🕘', label: 'History'  },
+    { id: 'guide',     icon: '🧭', label: 'Guide'    },
+    { id: 'numbers',   icon: '📞', label: 'Numbers'  },
     { id: 'laws',      icon: '⚖️', label: 'Laws'     },
-    { id: 'settings',  icon: '⚙️', label: 'Settings' },
   ];
 
   return (
