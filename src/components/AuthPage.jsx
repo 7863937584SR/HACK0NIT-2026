@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import appLogo from '../assets/vite.svg';
+import appLogo from '../assets/sentinel-logo.svg';
 
 // Floating particle dots for background
 function Particles() {

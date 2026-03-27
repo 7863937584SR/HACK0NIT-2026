@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sentinel Link Shield</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="card">
+      <div class="brand">
+        <img src="icons/icon128.png" alt="Sentinel logo" class="brand-logo" />
+        <h1>Sentinel Link Shield</h1>
+      </div>
+      <p class="sub">Scan browser navigations and block risky destinations.</p>
+
+      <label class="row">
+        <span>Protection Enabled</span>
+        <input id="enabled" type="checkbox" />
+      </label>
+
+      <label class="row">
+        <span>Strict Mode</span>
+        <input id="strictMode" type="checkbox" />
+      </label>
+
+      <div class="group">
+        <label for="allowlist">Allowlist Domains (comma separated)</label>
+        <textarea id="allowlist" rows="3" placeholder="example.com, mybank.com"></textarea>
+      </div>
+
+      <button id="saveBtn">Save Settings</button>
+      <p id="status" class="status"></p>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

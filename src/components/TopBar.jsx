@@ -1,4 +1,4 @@
-import appLogo from '../assets/vite.svg';
+import appLogo from '../assets/sentinel-logo.svg';
 
 export default function TopBar({ user, onLogout, onGoToVault }) {
   return (

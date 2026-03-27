@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sentinel Blocked a Risky Link</title>
+    <link rel="stylesheet" href="blocked.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <section class="card">
+        <div class="brand">
+          <img src="icons/icon128.png" alt="Sentinel logo" class="brand-logo" />
+          <p class="badge">Sentinel Link Shield</p>
+        </div>
+        <h1>Risky Link Blocked</h1>
+        <p class="sub" id="subText">This destination was flagged before it opened.</p>
+
+        <div class="target" id="targetUrl"></div>
+
+        <div class="meta">
+          <div class="meta-item">
+            <span class="label">Risk score</span>
+            <strong id="riskScore">-</strong>
+          </div>
+          <div class="meta-item">
+            <span class="label">Decision</span>
+            <strong class="danger">Blocked</strong>
+          </div>
+        </div>
+
+        <h2>Reasons</h2>
+        <ul id="reasonList"></ul>
+
+        <div class="actions">
+          <button id="stayBtn" class="secondary">Stay Safe</button>
+          <button id="proceedBtn" class="danger">Open Anyway</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="blocked.js"></script>
+  </body>
+</html>

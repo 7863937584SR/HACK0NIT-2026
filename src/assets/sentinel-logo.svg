@@ -1,16 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Sentinel One Logo</title>
+  <desc id="desc">Shield emblem with S mark for Sentinel One</desc>
   <defs>
-    <linearGradient id="shieldGrad" x1="16" y1="14" x2="78" y2="82" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#4F46E5"/>
-      <stop offset="1" stop-color="#06B6D4"/>
+    <linearGradient id="shieldGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="100%" stop-color="#34d399" />
     </linearGradient>
-    <linearGradient id="checkGrad" x1="29" y1="49" x2="64" y2="49" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#FFFFFF"/>
-      <stop offset="1" stop-color="#DDF4FF"/>
+    <linearGradient id="sGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#dbeafe" />
     </linearGradient>
   </defs>
-
-  <rect x="8" y="8" width="80" height="80" rx="22" fill="#EEF2FF"/>
-  <path d="M48 16L72 24V44C72 59.3 62.6 73.1 48 80C33.4 73.1 24 59.3 24 44V24L48 16Z" fill="url(#shieldGrad)"/>
-  <path d="M40.9 56.3L31.8 47.1C30.9 46.2 30.9 44.8 31.8 43.9C32.7 43 34.1 43 35 43.9L42.5 51.4L61 33C61.9 32.1 63.3 32.1 64.2 33C65.1 33.9 65.1 35.3 64.2 36.2L44.2 56.3C43.3 57.2 41.8 57.2 40.9 56.3Z" fill="url(#checkGrad)"/>
+  <rect x="2" y="2" width="124" height="124" rx="28" fill="#0f172a" stroke="#334155" stroke-width="4" />
+  <path d="M64 14 102 30v30c0 27-18 45-38 54C44 105 26 87 26 60V30z" fill="url(#shieldGrad)" />
+  <path d="M83 44c-2-8-9-14-19-14-12 0-20 7-20 17 0 8 5 13 15 16l8 3c4 1 6 3 6 6 0 4-3 6-8 6-6 0-9-3-10-8H41c1 12 10 20 24 20 13 0 22-8 22-18 0-9-5-14-15-17l-8-3c-4-1-6-3-6-6 0-3 3-5 7-5 5 0 8 3 9 8z" fill="url(#sGrad)" />
 </svg>

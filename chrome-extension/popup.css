@@ -1,0 +1,75 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-width: 340px;
+  font-family: Segoe UI, Arial, sans-serif;
+  background: #0b1020;
+  color: #eef2ff;
+}
+.card {
+  padding: 14px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+h1 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+.sub {
+  margin: 0 0 14px;
+  color: #a9b5d9;
+  font-size: 12px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  font-size: 13px;
+}
+.group {
+  margin: 10px 0;
+}
+.group label {
+  display: block;
+  font-size: 12px;
+  color: #b8c4e6;
+  margin-bottom: 5px;
+}
+textarea {
+  width: 100%;
+  background: #121a33;
+  color: #eef2ff;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 8px;
+  resize: vertical;
+}
+button {
+  width: 100%;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(135deg, #22d3ee, #34d399);
+  color: #04111b;
+}
+.status {
+  margin: 8px 0 0;
+  min-height: 16px;
+  font-size: 12px;
+  color: #89f0c4;
+}
