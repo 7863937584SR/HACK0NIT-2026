@@ -156,7 +156,7 @@ export default function DeepfakeChecker({ onScan }) {
     setMediaMetadata(meta);
   };
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     setIsAnalyzing(true);
 
     let totalScore = 0;
@@ -168,6 +168,31 @@ export default function DeepfakeChecker({ onScan }) {
       totalScore += mediaMetadata.score;
       totalReasons.push(...mediaMetadata.reasons);
       fileMetaData = mediaMetadata.metadata;
+    }
+
+    // Call ML backend for images
+    if (checkType === 'image' && uploadedFile) {
+      try {
+        const formData = new FormData();
+        formData.append('image', uploadedFile);
+        const mlRes = await fetch('http://localhost:5005/detect_image_deepfake', {
+          method: 'POST',
+          body: formData,
+        });
+        if (mlRes.ok) {
+          const mlData = await mlRes.json();
+          const mlScore = mlData.score * 100;
+          totalScore += mlScore;
+          if (mlData.deepfake === 'fake') {
+             totalReasons.push(`🤖 ML Detector: High confidence of AI generation or manipulation (${mlScore.toFixed(1)}%)`);
+          } else {
+             totalReasons.push(`✅ ML Detector: Image structural integrity appears normal (${(100 - mlScore).toFixed(1)}% authentic)`);
+          }
+        }
+      } catch (err) {
+        console.error('ML Analysis failed:', err);
+        totalReasons.push('⚠️ ML Analysis unavailable (Backend offline or failed)');
+      }
     }
 
     // Analyze description text

@@ -1,3 +1,5 @@
 flask
 scikit-learn
 joblib
+opencv-python
+numpy
