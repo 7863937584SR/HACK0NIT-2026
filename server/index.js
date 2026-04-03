@@ -2,6 +2,21 @@ const express = require('express');
 const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const crypto = require('crypto');
+
+// Password hashing helpers using built-in crypto (no external dependency)
+function hashPassword(password) {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.scryptSync(password, salt, 64).toString('hex');
+  return `${salt}:${hash}`;
+}
+
+function verifyPassword(password, stored) {
+  const [salt, hash] = stored.split(':');
+  if (!salt || !hash) return false;
+  const hashToVerify = crypto.scryptSync(password, salt, 64).toString('hex');
+  return crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(hashToVerify, 'hex'));
+}
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -67,8 +82,9 @@ app.post('/api/auth/register', (req, res) => {
 
   const avatar = name.charAt(0).toUpperCase();
 
+  const hashedPassword = hashPassword(password);
   const query = `INSERT INTO users (name, email, password, avatar) VALUES (?, ?, ?, ?)`;
-  db.run(query, [name, email.toLowerCase(), password, avatar], function(err) {
+  db.run(query, [name, email.toLowerCase(), hashedPassword, avatar], function(err) {
     if (err) {
       if (err.message.includes('UNIQUE constraint failed')) {
         return res.status(409).json({ error: 'Email already exists' });
@@ -100,7 +116,7 @@ app.post('/api/auth/login', (req, res) => {
   db.get(query, [email.toLowerCase()], (err, user) => {
     if (err) return res.status(500).json({ error: 'Database error' });
     if (!user) return res.status(404).json({ error: 'User not found' });
-    if (user.password !== password) return res.status(401).json({ error: 'Incorrect password' });
+    if (!verifyPassword(password, user.password)) return res.status(401).json({ error: 'Incorrect password' });
 
     res.json({
       user: {
@@ -117,7 +133,8 @@ app.post('/api/auth/login', (req, res) => {
 // 3. Scans: Get User History
 app.get('/api/scans/:userId', (req, res) => {
   const { userId } = req.params;
-  const limits = req.query.limit ? `LIMIT ${req.query.limit}` : '';
+  const parsedLimit = parseInt(req.query.limit, 10);
+  const limits = (Number.isFinite(parsedLimit) && parsedLimit > 0) ? `LIMIT ${parsedLimit}` : '';
   
   const query = `SELECT * FROM scans WHERE userId = ? ORDER BY createdAt DESC ${limits}`;
   db.all(query, [userId], (err, rows) => {

@@ -181,12 +181,15 @@ export default function DeepfakeChecker({ onScan }) {
         });
         if (mlRes.ok) {
           const mlData = await mlRes.json();
-          const mlScore = mlData.score * 100;
-          totalScore += mlScore;
+          const confidence = mlData.score * 100;
+          // When the model says "real", the risk score should be LOW (invert the confidence).
+          // When the model says "fake", the risk score should be HIGH (use confidence directly).
+          const mlRiskScore = mlData.deepfake === 'fake' ? confidence : (100 - confidence);
+          totalScore += mlRiskScore;
           if (mlData.deepfake === 'fake') {
-             totalReasons.push(`🤖 ML Detector: High confidence of AI generation or manipulation (${mlScore.toFixed(1)}%)`);
+             totalReasons.push(`🤖 ML Detector: High confidence of AI generation or manipulation (${confidence.toFixed(1)}%)`);
           } else {
-             totalReasons.push(`✅ ML Detector: Image structural integrity appears normal (${(100 - mlScore).toFixed(1)}% authentic)`);
+             totalReasons.push(`✅ ML Detector: Image structural integrity appears normal (${confidence.toFixed(1)}% authentic)`);
           }
         }
       } catch (err) {
